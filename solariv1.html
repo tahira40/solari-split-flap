@@ -1,0 +1,75 @@
+<!HTML Document>
+<HTML>
+<head>
+<meta charset="utf-8">
+
+<meta http-equiv="refresh" content="180"/>
+	<title>Split Flap Display version 1</title>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+
+<link rel="stylesheet" href="solariv1.css">
+
+</head>
+
+<body>
+
+<script>
+
+
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+        
+      
+    }, 1000);
+}
+
+
+window.onload = function(){
+//timer function
+var threeMinutes = 60 * 3,
+        display = document.querySelector('#time');
+    startTimer(threeMinutes, display);
+  
+   
+}
+
+
+</script>
+
+
+<div class="glow">
+<h6>Air Quality top 15 worst cities right now</h6>
+</div>
+
+<div class="timer">
+Updating in <span id="time">03:00</span> minutes!
+</div>
+
+<div class="contentframe">
+ <p align="center"><iframe src="flapper.html" width="1000" height="300" style="border:1px solid black" display="block"; ></p>
+</iframe>
+</div>
+ 
+<div class="footer">
+Copyright 1999-2020 by Refsnes Data. All Rights Reserved.
+</div>
+
+
+
+</body>
+</html>
