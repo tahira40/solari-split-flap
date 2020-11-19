@@ -1,207 +1,10 @@
-<!doctype html><html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" 
-              content="width=device-width,  
-                       initial-scale=1.0" /> 
-	<title>Split Flap Display version 1</title>
-	<style>
-.container {
-	clear     : left;
-	margin    : 5px auto;/*outer portion of flap*/
-	padding   : 5px;
-	background: grey;
-	max-width : 946px;
-}
-.container:after {
-	content: "";
-	display: table;
-	clear  : both;
-}
-.flapset {
-	position   : relative;
-	float      : left;
-	perspective: 300px;
-	height     : 1em;
-	width      : 1em;
-	margin     : 0 2px;
-	font-family: monospace;/* text inside flap*/
-	font-size  : 18px;
-	line-height: 1em;
-	text-align : center;
-	color      : white;
-}
-
-
-
-.flap {
-	position  : absolute;
-	width     : 1em;
-	height    : 0.5em;
-	overflow  : hidden;
-	background: black;/* middle portion of flap */
-	z-index   : 0;
-	
-	animation-duration       : .05s;
-	animation-timing-function: linear;
-	animation-fill-mode      : forwards;
-	transform-style          : preserve-3d;
-	backface-visibility      : hidden;
-}
-
-.flap span {
-  display: inline-block;
-}
-
-.flap-bottom span {
-  transform: translateY(-0.5em);    /* show bottom only */
-}
-
-.flap-top {
-  transform-origin: left bottom;
-}
-
-.flap-bottom {
-	transform-origin: left top;
-	transform       : translateY(0.5em) rotate3d(1,0,0,180deg);
-}
-
-.enter {
-	z-index: 2;
-}
-
-.flap-top.enter {
-	animation-name: topEnter;
-}
-.flap-bottom.enter {
-	animation-name: bottomEnter;
-}
-.flap-top.exit {
-	animation-name: topExit;
-}
-.flap-bottom.exit {
-	animation-name: bottomExit;
-}
-
-
-
-@keyframes topEnter {
-	0% {
-		z-index: 1;
-	}
-	100% {
-		z-index: 2;
-	}
-}
-
-@keyframes topExit {
-	0% {
-		transform: rotate3d(1,0,0,0deg);
-		z-index: 2;
-	}
-	50% {
-		transform: rotate3d(1,0,0,-90deg);
-		z-index: 2;
-	}
-	100% {
-		transform: rotate3d(1,0,0,-180deg);
-		z-index: 0;
-	}
-}
-
-@keyframes bottomEnter {
-	0% {
-  	transform: translateY(0.5em) rotate3d(1,0,0,180deg);
-		z-index: 0;
-	}
-	50% {
-  	transform: translateY(0.5em) rotate3d(1,0,0,90deg);
-		z-index: 1;
-	}
-	100% {
-  	transform: translateY(0.5em) rotate3d(1,0,0,0deg);
-		z-index: 2;
-	}
-}
-
-@keyframes bottomExit {
-	0% {
-  	transform: translateY(0.5em) rotate3d(1,0,0,0deg);
-		z-index: 2;
-	}
-	75% {
-  	transform: translateY(0.5em) rotate3d(1,0,0,0deg);
-		z-index: 1;
-	}
-	100% {
-		opacity: 1e-6;
-  	transform: translateY(0.5em) rotate3d(1,0,0,180deg);
-		z-index: 0;
-	}
-}
-
-/*stylefor heading */
-
-.column {
-	
-  float: left;
-  padding: 5px;
-  height: 20px; 
-} 
-
-.right {
-  width: 22%;
-} 
-
-.middle {
-  width: 14%;
-}
-
-.left {
-  width: 54%;
-}
-
-.row:after {
-  content: "";
-  display: inline-block;
-  width: 100%;
-  height: auto;
-  clear: both;
-}
-	</style>
-</head>
-<body>
-
-<!-- Table for haeding-->
-<div class="row">
-  <div class="column left">
-    <h4 style="text-align:center">Location</h4>
-  </div>
-  
-  <div class="column middle">
-    <h4>AQI</h4>
-  </div>
-  
-  <div class="column right">
-    <h4 style="text-align:center">Level</h4>
-  </div>  
-</div>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
-
-<script>
-
-
 String.prototype.padRight = function(length, character) {
 	return this + Array(length - this.length + 1).join(character || " ");
 }
 
 // ASCII characters to use
 var charGroups = [
-	{offset: 32, length: 1},
-	{offset: 44, length: 1}, 	// begin with space
+	{offset: 32, length: 1},	// begin with space
 	{offset: 48, length: 10},
 	{offset: 65, length: 26}
 ];
@@ -209,7 +12,7 @@ var charGroups = [
 var chars           = genChars(charGroups);
 var columns         = 43;											// tab stops?
 var rows            = 1;
-var delayFactor     = 5;
+var delayFactor     = 50;
 var defaultDuration = 100;
 var duration, containers;
 var str;
@@ -239,7 +42,6 @@ function init() {
 			.selectAll(".flap")
 				.data(chars).enter()
 			    .call(addFlaps);
-				
 	// initialise first flap in each set with enter class
 	var starters = reset();
 	// computes the animation speed using CSS style rule of first element
@@ -350,7 +152,7 @@ function addFlaps(selection) {
 		.attr("data-next", getNextIndex)
 		.append("span")
 			.text(function(d) { return d;})
-			.on("mouseover", update("kolkata,wb             210        bad"));
+			.on("mouseover", update("west bengal"));
 			
 }
 
@@ -408,7 +210,7 @@ function getNextIndex(d) {
 	var i = chars.indexOf(d) + 1;
 	if (i === chars.length ) {
 		i = 0;
-		
+	
 	}
 	return i;
 }
@@ -439,7 +241,3 @@ function getAnimationDuration(element) {
   return false;
 }
 
-	</script>
-
-</body>
-</html>
