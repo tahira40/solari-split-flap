@@ -1,4 +1,4 @@
-Interoduction
+Introduction
 -------------
 This is a simulation of a split-flap display (often called a Solari board)
 designed to run in a web browser.
