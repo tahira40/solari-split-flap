@@ -154,11 +154,11 @@
 } 
 
 .middle {
-  width: 14%;
+  width: 30%;
 }
 
 .left {
-  width: 54%;
+  width: 30%;
 }
 
 .row:after {
@@ -179,7 +179,7 @@
   </div>
   
   <div class="column middle">
-    <h4>AQI</h4>
+    <h4 style="text-align:right">AQI</h4>
   </div>
   
   <div class="column right">
@@ -212,11 +212,59 @@ var rows            = 1;
 var delayFactor     = 5;
 var defaultDuration = 100;
 var duration, containers;
-var str;
+var fstr;
+
+
+
+
+//get live data
+
+
+
+// Create a request variable and assign a new XMLHttpRequest object to it.
+var request = new XMLHttpRequest();
+
+// Open a new connection, using the GET request on the URL endpoint
+request.open("GET", "http://api.airpollutionapi.com/1.0/aqi?lat=22.569719&lon=88.36972&APPID=garlt8ckqlucvogug9s01fhitr", true);
+
+
+
+request.onload = function () {
+
+var jsonobj = JSON.parse(this.response);
+//console.log(request.status);
+
+if (request.status >= 200 && request.status < 400) {
+
+		
+		var aqival = jsonobj.data.aqiParams[1].aqi;
+		
+		var level = jsonobj.data.aqiParams[1].text;
+		
+} else {
+  console.log('error');
+}
+		var location = "kolkata,wb";
+		var padloc = location.padEnd(24,' ');
+		var saqi = aqival.toString();
+		var padaqi = saqi.padEnd(4,' ');
+		var padlevel = level.padEnd(15,' ');
+	    fstr = padloc + padaqi + padlevel;
+	    update(fstr);
+  // Begin accessing JSON data here
+}
+
+request.send();
+// Send request
+
+//get data end
+
 
 
 
 init();
+//update(fstr);
+
 
 
 /**
@@ -263,13 +311,13 @@ function reset() {
  * 
  * @return void
  */
-function update(str) {
+function update(fstr) {
 	// temporary
 	
 	
 	for( var no_of_rows=1; no_of_rows <= rows; no_of_rows++)
 	{
-		var msg = characters(str, columns);
+		var msg = characters(fstr, columns);
 		var line = Math.floor(Math.random() * no_of_rows);
 
 
@@ -350,7 +398,7 @@ function addFlaps(selection) {
 		.attr("data-next", getNextIndex)
 		.append("span")
 			.text(function(d) { return d;})
-			.on("mouseover", update("kolkata,wb             210        bad"));
+			//.on("mouseover", update("kolkata,wb             210        bad"));
 			
 }
 

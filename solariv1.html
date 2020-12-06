@@ -20,6 +20,7 @@
 
 
 function startTimer(duration, display) {
+	
     var timer = duration, minutes, seconds;
     setInterval(function () {
         minutes = parseInt(timer / 60, 10);
@@ -44,9 +45,10 @@ window.onload = function(){
 var threeMinutes = 60 * 3,
         display = document.querySelector('#time');
     startTimer(threeMinutes, display);
-  
+  	
    
 }
+
 
 
 </script>
